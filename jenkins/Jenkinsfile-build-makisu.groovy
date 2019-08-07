@@ -14,7 +14,11 @@ def serviceAccount = env.SERVICE_ACCOUNT ?: "jenkins"
 def registry = env.REGISTRY ?: "docker.io"
 def imageName = env.IMAGE_NAME ?: "ibmcase/bluecompute-orders"
 
-podTemplate(yaml: """
+podTemplate(
+    label: podLabel, 
+    cloud: cloud, 
+    serviceAccount: serviceAccount, 
+    yaml: """
 kind: Pod
 metadata:
   name: image-build

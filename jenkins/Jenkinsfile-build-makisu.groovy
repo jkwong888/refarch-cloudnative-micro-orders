@@ -20,6 +20,7 @@ podTemplate(label: podLabel, cloud: cloud, serviceAccount: serviceAccount, envVa
     ],
     volumes: [
         emptyDirVolume(mountPath: '/home/gradle/.gradle'),
+        emptyDirVolume(mountPath: '/makisu-storage'),
     ],
     containers: [
         containerTemplate(name: 'jdk', image: 'ibmcase/openjdk-bash:alpine', ttyEnabled: true, command: 'cat'),

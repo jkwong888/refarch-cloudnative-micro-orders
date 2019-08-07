@@ -14,19 +14,31 @@ def serviceAccount = env.SERVICE_ACCOUNT ?: "jenkins"
 def registry = env.REGISTRY ?: "docker.io"
 def imageName = env.IMAGE_NAME ?: "ibmcase/bluecompute-orders"
 
-podTemplate(label: podLabel, cloud: cloud, serviceAccount: serviceAccount, envVars: [
-        envVar(key: 'REGISTRY', value: registry),
-        envVar(key: 'IMAGE_NAME', value: imageName),
-    ],
-    volumes: [
-        emptyDirVolume(mountPath: '/home/gradle/.gradle'),
-        emptyDirVolume(mountPath: '/makisu-storage'),
-    ],
-    containers: [
-        containerTemplate(name: 'jdk', image: 'ibmcase/openjdk-bash:alpine', ttyEnabled: true, command: 'cat'),
-        containerTemplate(name: 'makisu', image: 'jkwong/makisu-alpine:v0.1.11', ttyEnabled: true, command: 'cat'),
-        containerTemplate(name: 'skopeo', image: 'jkwong/skopeo-jenkins:latest', ttyEnabled: true, command: 'cat')
-    ]) {
+podTemplate(yaml: """
+kind: Pod
+metadata:
+  name: image-build
+spec:
+  containers:
+  - name: jdk
+    image: ibmcase/openjdk-bash:alpine
+    volumeMounts:
+    - name: gradle
+      mountPath: /home/gradle/.gradle
+  - name: makisu
+    image: jkwong/makisu-alpine:v0.1.11
+    volumeMounts:
+    - name: makisu-storage
+      mountPath: /makisu-storage
+  - name: skopeo
+    image: jkwong/skopeo-jenkins:latest
+  volumes:
+  - name: gradle
+    emptyDir: {}
+  - name: makisu-storage
+    emptyDir: {}
+"""
+) {
     node(podLabel) {
         checkout scm
 

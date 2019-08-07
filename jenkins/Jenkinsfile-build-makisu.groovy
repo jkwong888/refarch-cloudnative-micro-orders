@@ -26,16 +26,25 @@ spec:
   containers:
   - name: jdk
     image: ibmcase/openjdk-bash:alpine
+    tty: true
+    command:
+    - /bin/cat
     volumeMounts:
     - name: gradle
       mountPath: /home/gradle/.gradle
   - name: makisu
     image: jkwong/makisu-alpine:v0.1.11
+    tty: true
+    command:
+    - /bin/cat
     volumeMounts:
     - name: makisu-storage
       mountPath: /makisu-storage
   - name: skopeo
     image: jkwong/skopeo-jenkins:latest
+    tty: true
+    command:
+    - /bin/cat
   volumes:
   - name: gradle
     emptyDir: {}

@@ -70,6 +70,7 @@ spec:
                 sh """
                 #!/bin/sh
                 /makisu-internal/makisu build \
+                  --preserve-root \
                   --modifyfs \
                   -t ${IMAGE_NAME}:${env.BUILD_NUMBER} \
                   --dest `pwd`/image.tar \

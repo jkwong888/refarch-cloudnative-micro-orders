@@ -34,6 +34,7 @@ spec:
       mountPath: /home/gradle/.gradle
   - name: makisu
     image: jkwong/makisu-alpine:v0.1.11
+    imagePullPolicy: Always
     tty: true
     command:
     - /bin/cat
